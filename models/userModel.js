@@ -1,5 +1,5 @@
 const mongoose= require("mongoose")
-const Schema = mongoose.schema  //class
+const schema = mongoose.Schema  //class
 
 const userSchema = new schema({
     name: String,

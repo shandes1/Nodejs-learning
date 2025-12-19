@@ -9,6 +9,8 @@
 // always needed
 const express = require("express")
 const dbSangaConnection = require("./database/connection")
+const User = require("./models/userModel")
+const Blog = require("./models/blogModel")
 const app= express()
 
 // data base
@@ -32,6 +34,23 @@ app.get("/about",function(req,res){                      //get,post,put,patch,de
 })
 
 
+// user
+app.get("/fetch-users",async function(req,res){
+    const data = await User.find()
+    res.json({
+        data // data: data
+    }) 
+})
+
+// Blog
+app.get("/fetch-blog", async function(req,res){
+    const blog= await Blog.find()
+    res.json({
+        blog
+    })
+})
+
+
 app.listen(3000,function(){ //callback function --function as a parameter  //listen-->method
     console.log("server has started at port 3000")
 })  // this will book a port for us to use
@@ -42,3 +61,4 @@ app.listen(3000,function(){ //callback function --function as a parameter  //lis
 // mongodb+srv://sandesh:<db_password>@cluster0.hh2ueat.mongodb.net/?appName=Cluster0  --> connection string
 
 // ip whitelist error occur if switch wifi to different one
+
