@@ -128,10 +128,18 @@ app.post("/blog-create", async function(req,res){
         message: "blog created successfully!!"
     })
 })
-
+ 
 // blog delete 
 app.delete("/blog-delete", async function(req,res){
     const id = req.body.id
+    await Blog.findByIdAndDelete(id)
+    res.json({
+        message: "Blog id deleted succesfully!!"
+    })
+})
+
+app.delete("/blog-delete/:id", async function(req,res){
+    const id = req.params.id
     await Blog.findByIdAndDelete(id)
     res.json({
         message: "Blog id deleted succesfully!!"
