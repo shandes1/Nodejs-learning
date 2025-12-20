@@ -5,7 +5,7 @@ const schema= mongoose.Schema  // class ho yo
 const blogSchema= new schema({    //object ho yo
     title: String,
     subtitle: String,
-    describtion: String,
+    description: String,
 })
 
 // table
