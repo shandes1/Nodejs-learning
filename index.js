@@ -14,6 +14,9 @@ const Blog = require("./models/blogModel")
 const bcrypt = require('bcrypt')
 const app= express()
 
+// to operate .env
+require("dotenv").config()
+
 //this allow node to read json data
 app.use(express.json())
 
@@ -97,10 +100,6 @@ app.delete("/delete", async function(req,res){
 })
 
 
-app.listen(3000,function(){ //callback function --function as a parameter  //listen-->method
-    console.log("server has started at port 3000")
-})  // this will book a port for us to use
-
 
 // orm tool is mongoose it connect server with databases 
 // to install it  use npm install mongoose
@@ -145,3 +144,90 @@ app.delete("/blog-delete/:id", async function(req,res){
         message: "Blog id deleted succesfully!!"
     })
 })
+
+// single data 
+app.get("/fetch-single/:id",async function(req,res){
+    const id = req.params.id
+    const data = await User.findById(id).select(["-password","-__v"])  //this exclude password --> j lai na pathaune teslai --ve lekne  
+                                                                        //select take only one arg so we make array
+    res.json({
+        data:data
+    })
+})
+
+app.get("/fetch-single-blog/:id", async function(req,res){
+     const id = req.params.id
+     const data= await Blog.findById(id).select("-__v")
+     res.json({
+        data:data
+     })
+})
+
+// Update 
+app.patch("/update-user/:id",async function(req,res){
+    const id= req.params.id
+    const name= req.body.name
+    const email = req.body.email
+    const password= req.body.password
+
+    await User.findByIdAndUpdate(id,{
+        name:name,
+        email:email,
+        password: bcrypt.hashSync(password,10)
+    })
+
+    res.json({
+        message: "UPdate data successfully!!"
+    })
+})
+
+
+app.patch("/update-blog/:id", async function(req,res) {
+    const id=req.params.id
+    const title= req.body.title
+    const subtitle= req.body.subtitle
+    const description= req.body.description
+
+    await Blog.findByIdAndUpdate(id,{
+        title:title,
+        subtitle: subtitle,
+        description: description
+    })
+
+    res.json({
+        message : "Update blog successfully"
+    })
+})
+
+// login
+app.post("/login", async function (req,res) {
+    const email= req.body.email
+    const password= req.body.password
+
+    const data = await User.findOne({email:email})
+    if(!data){
+        res.json({
+            messsage: "not rergistered"
+        })
+    }else{
+       const isMatched= bcrypt.compareSync(password,data.password)
+       if (isMatched){
+        res.json({
+            message: "Login successfull!!"
+        })
+       }else{
+        res.json({
+            message: "Password invalid"
+        })
+       }
+    }
+})
+
+
+
+app.listen(3000,function(){ //callback function --function as a parameter  //listen-->method
+    console.log("server has started at port 3000")
+})  // this will book a port for us to use
+// except start and test for other we use npm run "that_word"
+
+// .env--> 

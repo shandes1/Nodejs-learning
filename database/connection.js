@@ -1,7 +1,7 @@
 const mongoose= require("mongoose")
 
 async function  dbSangaConnection(){ //camel case--> yesma 1st word sab sano aaru ko 1st letter capital
-    await mongoose.connect("mongodb+srv://sandesh:basnet@cluster0.hh2ueat.mongodb.net/?appName=Cluster0")
+    await mongoose.connect(process.env.CONNECTION)
     console.log("Connected succesfully!!")
 }
 
